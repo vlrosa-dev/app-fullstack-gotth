@@ -1,0 +1,14 @@
+package views
+
+import "app-fullstack-gotth/views/components"
+
+templ Layout() {
+	<!DOCTYPE html>
+	<html lang="en">
+		@components.Head()
+		<body class="sample-transition" hx-boost="true">
+			@components.Header()
+			{ children... }
+		</body>
+	</html>
+}
