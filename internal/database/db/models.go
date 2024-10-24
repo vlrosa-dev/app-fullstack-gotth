@@ -17,3 +17,11 @@ type User struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
+
+type Verification struct {
+	ID        int32
+	Email     string
+	Code      string
+	ExpiresAt time.Time
+	Type      string
+}
