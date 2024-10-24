@@ -38,6 +38,79 @@ func (q *Queries) CreateOneUser(ctx context.Context, arg CreateOneUserParams) er
 	return err
 }
 
+const deleteOneUser = `-- name: DeleteOneUser :exec
+DELETE FROM users
+WHERE id=$1
+`
+
+func (q *Queries) DeleteOneUser(ctx context.Context, id string) error {
+	_, err := q.db.ExecContext(ctx, deleteOneUser, id)
+	return err
+}
+
+const getAllUsers = `-- name: GetAllUsers :many
+SELECT id, first_name, last_name, email, created_at, updated_at FROM users
+`
+
+type GetAllUsersRow struct {
+	ID        string
+	FirstName string
+	LastName  string
+	Email     string
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+func (q *Queries) GetAllUsers(ctx context.Context) ([]GetAllUsersRow, error) {
+	rows, err := q.db.QueryContext(ctx, getAllUsers)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetAllUsersRow
+	for rows.Next() {
+		var i GetAllUsersRow
+		if err := rows.Scan(
+			&i.ID,
+			&i.FirstName,
+			&i.LastName,
+			&i.Email,
+			&i.CreatedAt,
+			&i.UpdatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUserById = `-- name: GetUserById :one
+SELECT id, first_name, last_name, email, password, created_at, updated_at FROM users
+WHERE id=$1
+`
+
+func (q *Queries) GetUserById(ctx context.Context, id string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserById, id)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
+}
+
 const updateOneUser = `-- name: UpdateOneUser :exec
 UPDATE users SET first_name=$2, last_name=$3
 WHERE id=$1
@@ -52,4 +125,24 @@ type UpdateOneUserParams struct {
 func (q *Queries) UpdateOneUser(ctx context.Context, arg UpdateOneUserParams) error {
 	_, err := q.db.ExecContext(ctx, updateOneUser, arg.ID, arg.FirstName, arg.LastName)
 	return err
+}
+
+const userAlreadyExists = `-- name: UserAlreadyExists :one
+SELECT id, first_name, last_name, email, password, created_at, updated_at FROM users
+WHERE email=$1
+`
+
+func (q *Queries) UserAlreadyExists(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, userAlreadyExists, email)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.LastName,
+		&i.Email,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+	)
+	return i, err
 }
