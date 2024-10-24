@@ -1,7 +1,7 @@
 package share
 
 import (
-	"app-fullstack-gotth/views/errorsviews"
+	"app-fullstack-gotth/internal/views/errorsviews"
 	"net/http"
 
 	"github.com/a-h/templ"
