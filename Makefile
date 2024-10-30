@@ -1,6 +1,6 @@
 include .env
 
-all: templ build run
+all: tailwind templ build run
 
 run:
 	@go run cmd/main.go
@@ -11,6 +11,10 @@ build:
 templ:
 	# Generate templ
 	@templ generate
+
+tailwind:
+	# Generate css minify
+	@./tailwindcss -i static/css/base.css -o static/css/tailwind.css -c ./tailwind.config.js --minify
 
 db_generate:
 	# Sqlc generate

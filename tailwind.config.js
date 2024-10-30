@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export const content = ["./views/**/*.templ"];
+export const content = ["./internal/views/**/*.templ"];
 export const theme = {
   extend: {},
 };
