@@ -11,8 +11,7 @@ templ Register() {
 			<form
 				hx-swap="transition:true"
 				class="rounded-xl drop-shadow-xl flex flex-col gap-4 w-96 p-8"
-				action=""
-				method="post"
+				hx-post="/register"
 			>
 				<label class="flex flex-col justify-start gap-2">
 					Email:
@@ -50,11 +49,22 @@ templ Register() {
 					</button>
 				</label>
 				<label class="flex flex-col justify-start gap-2">
-					Username:
+					FirstName:
 					<input
 						class="input input-bordered input-primary bg-slate-800"
 						type="text"
-						name="username"
+						name="first_name"
+						required
+						minlength="4"
+						maxlength="64"
+					/>
+				</label>
+				<label class="flex flex-col justify-start gap-2">
+					LastName:
+					<input
+						class="input input-bordered input-primary bg-slate-800"
+						type="text"
+						name="last_name"
 						required
 						minlength="4"
 						maxlength="64"
