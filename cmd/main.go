@@ -1,14 +1,13 @@
 package main
 
 import (
-	"app-fullstack-gotth/internal/database/db"
-	"app-fullstack-gotth/internal/handlers/authhandler"
-	"app-fullstack-gotth/internal/services/authservices"
-	"app-fullstack-gotth/share"
+	"app-fullstack-gotth/database/db"
 	"database/sql"
 	"fmt"
 	"log"
 	"os"
+
+	utils "app-fullstack-gotth/utils"
 
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -38,18 +37,11 @@ func main() {
 
 	// files static
 	e.Static("/static", "static")
-	e.HTTPErrorHandler = share.CustomHTTPErrorHandler
+	e.HTTPErrorHandler = utils.CustomHTTPErrorHandler
 
 	// queries db
 	queries := db.New(dbConnection)
-
-	// services
-	authServices := authservices.NewRegisterServices(queries)
-
-	// routes
-	e.GET("/login", authhandler.NewGetLoginHandler().Serve)
-	e.GET("/register", authhandler.NewGetRegisterHandler().Serve)
-	e.POST("/register", authhandler.NewPostRegisterHandler(authServices).Serve)
+	fmt.Println(queries)
 
 	// Start Server
 	e.Logger.Fatal(e.Start(":8082"))

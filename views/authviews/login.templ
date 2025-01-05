@@ -1,17 +1,19 @@
 package authviews
 
-import "app-fullstack-gotth/internal/views"
+import "app-fullstack-gotth/views"
 
-templ Register() {
+templ Login() {
 	<section class="card w-fit bg-base-200 shadow-xl mx-auto mb-8">
 		<div class="card-body pb-2">
 			<h1 class="card-title border-b border-b-slate-600 pb-[4px]">
-				Register User
+				Log In
 			</h1>
 			<form
 				hx-swap="transition:true"
+				hx-headers="js:{'X-TimeZone': Intl.DateTimeFormat().resolvedOptions().timeZone}"
 				class="rounded-xl drop-shadow-xl flex flex-col gap-4 w-96 p-8"
-				hx-post="/register"
+				action=""
+				method="post"
 			>
 				<label class="flex flex-col justify-start gap-2">
 					Email:
@@ -48,31 +50,9 @@ templ Register() {
 						</svg>
 					</button>
 				</label>
-				<label class="flex flex-col justify-start gap-2">
-					FirstName:
-					<input
-						class="input input-bordered input-primary bg-slate-800"
-						type="text"
-						name="first_name"
-						required
-						minlength="4"
-						maxlength="64"
-					/>
-				</label>
-				<label class="flex flex-col justify-start gap-2">
-					LastName:
-					<input
-						class="input input-bordered input-primary bg-slate-800"
-						type="text"
-						name="last_name"
-						required
-						minlength="4"
-						maxlength="64"
-					/>
-				</label>
 				<footer class="card-actions justify-end">
 					<button class="badge badge-primary px-6 py-4 hover:scale-[1.1]">
-						Register User
+						Sign In
 					</button>
 				</footer>
 			</form>
@@ -80,7 +60,7 @@ templ Register() {
 	</section>
 }
 
-templ RegisterIndex(cmp templ.Component) {
+templ LoginIndex(cmp templ.Component) {
 	@views.Layout() {
 		@cmp
 	}
